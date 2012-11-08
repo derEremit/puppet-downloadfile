@@ -1,0 +1,17 @@
+#!/bin/bash
+
+URL=$1
+DESTINATION=$2
+CHECKSUM=$3
+USER=${4="root"}
+GROUP=${5="root"}
+CHMOD=${6="644"}
+wget -q -O ${DESTINATION} ${URL}
+if [[ $(md5sum "${DESTINATION}" | cut -d " " -f 1) != ${CHECKSUM} ]]; then
+  echo "Checksum of ${DESTINATION} failed"
+  exit 1
+else
+  chmod ${CHMOD} ${DESTINATION}
+  chown ${USER} ${DESTINATION}
+  chgrp ${GROUP} ${DESTINATION}
+fi
